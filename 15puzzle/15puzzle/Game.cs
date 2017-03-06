@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace _15puzzle
 {
@@ -11,7 +12,7 @@ namespace _15puzzle
         public int[,] Field;
         private int dimensions;
         private int tmpI = 0, tmpJ = 0, _tmpI = 0, _tmpJ = 0;
-        private Dictionary<int, int> dictionary = new Dictionary<int, int>();
+        private Dictionary<int, Tuple<int, int>> dictionary = new Dictionary<int, Tuple<int, int>>();
 
         public Game(params int[] SomeArray)
         {
@@ -34,13 +35,15 @@ namespace _15puzzle
                         tmpI = i;
                         tmpJ = j;
                         Field[i, j] = SomeArray[count];
-                        dictionary.Add(0, count);
+                        var coord = Tuple.Create(i, j);
+                        dictionary.Add(Field[i, j], coord);
                         count++;
                     }
                     else
                     {
                         Field[i, j] = SomeArray[count];
-                        dictionary.Add(Field[i, j], count);
+                        var coord = Tuple.Create(i, j);
+                        dictionary.Add(Field[i, j], coord);
                         count++;
                     }
                 }
@@ -60,35 +63,29 @@ namespace _15puzzle
             }
         }
 
-        public int GetLocation(int value)
+        public Tuple<int, int> GetLocation(int value)
         {
             if (value >= 0 && value < Math.Pow(dimensions, 2))  
             {
-                return dictionary[value];
+                var coord = Tuple.Create(dictionary[value].Item1, dictionary[value].Item2);
+                return coord;
             }
             else throw new ArgumentException("Число не найдено");
         }
 
         public void Shift(int value)
         {
-            for (int i = 0; i < dimensions; i++)
-            {
-                for (int j = 0; j < dimensions; j++)
-                {
-                    if (Field[i, j] == value)
-                    {
-                        _tmpI = i;
-                        _tmpJ = j;
-                    }
-                }
-            }
+            _tmpI = dictionary[value].Item1;
+            _tmpJ = dictionary[value].Item2;
             if (Math.Abs(_tmpI - tmpI) + Math.Abs(_tmpJ - tmpJ) == 1)
             {
                 Field[tmpI, tmpJ] = Field[_tmpI, _tmpJ];
                 dictionary.Remove(0);
                 dictionary.Remove(value);
-                dictionary.Add(value, tmpI * dimensions + tmpJ);
-                dictionary.Add(0, _tmpI * dimensions + _tmpJ);
+                var coordZero = Tuple.Create(tmpI, tmpJ);
+                var coordValue = Tuple.Create(_tmpI, _tmpJ);
+                dictionary.Add(value, coordZero);
+                dictionary.Add(0, coordValue);
                 tmpI = _tmpI;
                 tmpJ = _tmpJ;
                 Field[tmpI, tmpJ] = 0;
@@ -101,35 +98,28 @@ namespace _15puzzle
 
         private bool IsCorrectData(int[] array)
         {
-            bool zeroFlag = false;
-            for (int i = 0; i < array.Length - 1; i++)
+           for (int i = 0; i < array.Length; i++)
             {
-                for (int j = i + 1; j < array.Length; j++)
+                if (array[i] < 0 || !array.Contains(i))
                 {
-                    if (((array[i] == array[j]) || (array[j] > array.Length - 1)) || (array[i] < 0))
-                    {
-                        return false;
-                    }
-                    if (array[i] == 0 || array[j] == 0)
-                    {
-                        zeroFlag = true;
-                    }
+                    return false;
                 }
             }
-            return zeroFlag;
+            return true;
         }
 
-        public void DisplayCurrentState(int[,] array)
+        public static Game FromCSV(string file)
         {
-            for (int i = 0; i < Math.Sqrt(array.Length); i++)
+            string[] csv = File.ReadAllLines(file);
+            List<int> list = new List<int>();
+            for (int i = 0; i < csv.Count(); i++)
             {
-                for (int j = 0; j < Math.Sqrt(array.Length); j++)
+                for (int j = 0; j < csv[i].Split(';').Count(); j++)
                 {
-                    Console.Write("{0}\t", array[i, j]);
+                    list.Add(Convert.ToInt32(csv[i].Split(';')[j]));
                 }
-                Console.WriteLine();
             }
-            Console.WriteLine();
+            return new Game(list.ToArray<int>());
         }
     }
 }

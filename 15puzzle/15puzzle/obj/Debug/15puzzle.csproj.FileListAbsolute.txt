@@ -4,3 +4,8 @@ C:\Users\Roman\Documents\Visual Studio 2015\Projects\15puzzle\15puzzle\bin\Debug
 C:\Users\Roman\Documents\Visual Studio 2015\Projects\15puzzle\15puzzle\obj\Debug\15puzzle.csprojResolveAssemblyReference.cache
 C:\Users\Roman\Documents\Visual Studio 2015\Projects\15puzzle\15puzzle\obj\Debug\15puzzle.exe
 C:\Users\Roman\Documents\Visual Studio 2015\Projects\15puzzle\15puzzle\obj\Debug\15puzzle.pdb
+C:\Users\Roman\Documents\GitHub\15puzzle\15puzzle\15puzzle\bin\Debug\15puzzle.exe.config
+C:\Users\Roman\Documents\GitHub\15puzzle\15puzzle\15puzzle\obj\Debug\15puzzle.exe
+C:\Users\Roman\Documents\GitHub\15puzzle\15puzzle\15puzzle\obj\Debug\15puzzle.pdb
+C:\Users\Roman\Documents\GitHub\15puzzle\15puzzle\15puzzle\bin\Debug\15puzzle.exe
+C:\Users\Roman\Documents\GitHub\15puzzle\15puzzle\15puzzle\bin\Debug\15puzzle.pdb
